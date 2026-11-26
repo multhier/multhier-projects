@@ -1,0 +1,250 @@
+﻿
+@model Web.ViewModels.MyProductVM
+
+
+<section class="  mb-5 mb-2">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-3 col-lg-4 col-md-5">
+
+                @await Component.InvokeAsync("CategoryLeftSide")
+
+
+                <div class="sidebar-filter">
+
+                            
+                @await Component.InvokeAsync("BrandComponent")
+
+
+                    <div class="top-filter-head mt-4">Fiyat Aralığı</div>
+<div class="common-filter">
+                 
+                        <div class="price-range-area">
+                            <div id="price-range"></div>
+                            <div class="value-wrapper d-flex">
+                                <div class="price">Fiyat:</div>
+                                <div id="lower-value"></div> <span>₺</span>
+                                <div class="to">-</div>
+                                <div id="upper-value"></div> <span>₺</span>
+                            </div>
+                            <form method="get">
+                                <input type="submit" value="Fiyat Aralığı için tıklayınız" onclick="addText()" onchange="this.form.submit()" class="btn btn-sm" style=" border:1px solid #d9d9d9; background:rgba(255, 255, 255, 0.64)">
+
+
+                                @if (Model.CategoryRoute != null)
+                                {
+                                    <input type="hidden" name="category" value="@Model.CategoryRoute" />
+                                }
+                                @if (Model.BrandRoute != null)
+                                {
+                                    <input type="hidden" name="prm_brand" value="@Model.BrandRoute" />
+                                }
+                                @if (Model.search != null)
+                                {
+                                    <input type="hidden" name="search" value="@Model.search" />
+                                }
+                                @if (Model.sortBy != null)
+                                {
+                                    <input type="hidden" name="sortBy" value="@Model.sortBy" />
+                                }
+
+
+                                <input type="hidden" name="minPrice" id="txtMin" value="@(((Model.minPrice))) " />
+                                <input type="hidden" name="maxPrice" id="txtMax" value="@(((Model.maxPrice))) " />
+
+                                <script>
+                                    function addText() {
+                                        (document.getElementById('txtMin').value) = (document.getElementById('lower-value').innerHTML);
+                                        (document.getElementById('txtMax').value) = (document.getElementById('upper-value').innerHTML);
+                                    }
+                                </script>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-xl-9 col-lg-8 col-md-7">
+                <div class="filter-bar d-flex flex-wrap align-items-center">
+                    <div class="sorting">
+
+                        @{
+                            var data = "Varsayılan, yeni çıkanlar, ucuzdan pahalıya, pahalıdan ucuza";
+                            var items = data.Split(',');
+                            List<SelectListItem> itemsList = new List<SelectListItem>();
+                            for (int i = 0; i < items.Length; i++)
+                            {
+                                itemsList.Add(new SelectListItem
+                                {
+                                    Text = items[i],
+                                    Value = (i + 1).ToString()
+                                });
+                            }
+                        }
+                        <form method="GET">
+                            @Html.DropDownList("sortBy", itemsList, new { required = "required", onchange = "this.form.submit();" })
+
+                            @if (Model.CategoryRoute != null)
+                            {
+                                <input type="hidden" name="category" value="@Model.CategoryRoute" />
+                            }
+                            @if (Model.BrandRoute != null)
+                            {
+                                <input type="hidden" name="prm_brand" value="@Model.BrandRoute" />
+                            }
+                            @if (Model.search != null)
+                            {
+                                <input type="hidden" name="search" value="@Model.search" />
+                            }
+                            @if (Model.minPrice != null)
+                            {
+                                <input type="hidden" name="minPrice" value="@Model.minPrice" />
+                            }
+                            @if (Model.maxPrice != null)
+                            {
+                                <input type="hidden" name="maxPrice" value="@Model.maxPrice" />
+                            }
+                        </form>
+                    </div>
+
+                    <div class="sorting mr-auto">
+                        @(((Model.Pager.CurrentPage - 1) * Model.Pager.PageSize) + 1 ) – @(((Model.Pager.CurrentPage - 1) * Model.Pager.PageSize) + (Model.Products.Count() < Model.Pager.PageSize ? Model.Products.Count() : Model.Pager.PageSize))  Toplam @Model.Pager.TotalItems Ürün
+
+                    </div>
+
+
+
+
+
+
+
+
+                    <div>
+                        <div class="input-group filter-bar-search">
+                            <form method="GET">
+                                <div class="input-group filter-bar-search">
+                                    <input type="text" placeholder="arama" name="search" onchange="this.form.submit()">
+                                    <div class="input-group-append">
+                                        <button type="button"><i class="ti-search"></i></button>
+                                    </div>
+                                </div>
+                                @if (Model.CategoryRoute != null)
+                                {
+                                    <input type="hidden" name="category" value="@Model.CategoryRoute" />
+                                }
+                                @if (Model.BrandRoute != null)
+                                {
+                                    <input type="hidden" name="prm_brand" value="@Model.BrandRoute" />
+                                }
+                                @if (Model.sortBy != null)
+                                {
+                                    <input type="hidden" name="sortBy" value="@Model.sortBy" />
+                                }
+                                @if (Model.minPrice != null)
+                                {
+                                    <input type="hidden" name="minPrice" value="@Model.minPrice" />
+                                }
+                                @if (Model.maxPrice != null)
+                                {
+                                    <input type="hidden" name="maxPrice" value="@Model.maxPrice" />
+                                }
+                            </form>
+
+                        </div>
+
+                    </div>
+
+
+
+
+                </div>
+
+
+
+                <!-- Products    @*onclick="location.href='/Ogeler/detail/@item.Id'"*@  -->
+                <section class="lattest-product-area pb-40 category-list">
+                    <div class="row">
+
+                        @foreach (var item in Model.Products)
+                        {
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card text-center card-product">
+                                    <div class="card-product__img">
+                                        <img class="card-img" src="@item.ImageUrl" alt="@item.ImageUrl">
+                                        <ul class="card-product__imgOverlay">
+                                            <li>
+                                                <a asp-route-detailname="@Url.FriendlyUrl(item.Name.ToString())"
+                                                   asp-route-Id="@item.Id" class="btn btn-sm"
+                                                   asp-controller="Ogeler" asp-action="detail"><i class="ti-search"></i></a>
+
+                                            </li>
+                                            <li>
+                                                @if (User.Identity.IsAuthenticated)
+                                                {
+                                                    <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                                                        <input type="hidden" name="productId" value="@item.Id" />
+                                                        <input type="hidden" name="quantity" value="1" />
+                                                        <button type="submit"><i class="ti-shopping-cart"></i></button>
+                                                    </form>
+                                                }
+                                            </li>
+                                            @*<li><button><i class="ti-heart"></i></button></li>*@
+                                        </ul>
+                                    </div>
+                                    <div class="card-body">
+                                        <h4 class="card-product__title">
+                                            @item.Name
+                                        </h4>
+                                        <p class="card-product__price">@item.Price.ToString("c")</p> 
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </section>
+
+
+                <hr />
+                <div class="clearfix"></div>
+
+                @if (Model.Pager.EndPage > 1)
+                {
+
+                    <ul class="pagination">
+                        @if (Model.Pager.CurrentPage > 1)
+                        {
+                            <li class="page-item"> <a class="page-link" asp-controller="Ogeler" asp-action="Index" asp-route-prm_page="@(Model.Pager.StartPage)" asp-route-category="@Model.CategoryRoute" asp-route-prm_brand="@Model.BrandRoute" asp-route-sortBy="@Model.sortBy" asp-route-search="@Model.search" asp-route-minPrice="@Model.minPrice" asp-route-maxPrice="@Model.maxPrice">İlk</a>  </li>
+
+                            <li class="page-item"> <a class="page-link" asp-controller="Ogeler" asp-action="Index" asp-route-prm_page="@(Model.Pager.CurrentPage - 1)" asp-route-category="@Model.CategoryRoute" asp-route-prm_brand="@Model.BrandRoute" asp-route-sortBy="@Model.sortBy" asp-route-search="@Model.search" asp-route-minPrice="@Model.minPrice" asp-route-maxPrice="@Model.maxPrice">Önceki</a> </li>
+                        }
+
+
+                        @for (var i = Model.Pager.StartPage; i <= Model.Pager.EndPage; i++)
+                        {
+                            <li class="@(i == Model.Pager.CurrentPage ? "page-item active" : "page-item ")">
+
+                                <a class="page-link" asp-controller="Ogeler" asp-action="Index" asp-route-prm_page="@i" asp-route-category="@Model.CategoryRoute" asp-route-prm_brand="@Model.BrandRoute" asp-route-sortBy="@Model.sortBy" asp-route-search="@Model.search" asp-route-minPrice="@Model.minPrice" asp-route-maxPrice="@Model.maxPrice">@i</a>
+                            </li>
+                        }
+
+
+                        @if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+                        {
+                            @*<li class="page-item"> <a class="page-link" href="/Products/Index?prm_page=@(Model.Pager.CurrentPage + 1)">Next</a> </li>*@
+                            <li class="page-item"> <a class="page-link" asp-controller="Ogeler" asp-action="Index" asp-route-prm_page="@(Model.Pager.CurrentPage + 1)" asp-route-category="@Model.CategoryRoute" asp-route-prm_brand="@Model.BrandRoute" asp-route-sortBy="@Model.sortBy" asp-route-search="@Model.search" asp-route-minPrice="@Model.minPrice" asp-route-maxPrice="@Model.maxPrice">Sonraki</a> </li>
+
+
+                            <li class="page-item"> <a class="page-link" asp-controller="Ogeler" asp-action="Index" asp-route-prm_page="@(Model.Pager.EndPage)" asp-route-category="@Model.CategoryRoute" asp-route-prm_brand="@Model.BrandRoute" asp-route-sortBy="@Model.sortBy" asp-route-search="@Model.search" asp-route-minPrice="@Model.minPrice" asp-route-maxPrice="@Model.maxPrice">En Son</a> </li>
+                        }
+                    </ul>
+                }
+
+
+
+            </div>
+        </div>
+    </div>
+</section>
+

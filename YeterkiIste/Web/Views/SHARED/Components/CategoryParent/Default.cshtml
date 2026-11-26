@@ -1,0 +1,13 @@
+﻿
+@model IEnumerable<Category>
+
+@foreach (var item in Model)
+{
+
+    <li class="nav-item ">
+        <a class="nav-link "
+           asp-controller="Ogeler" asp-action="Index" asp-route-ustcategoryname="@Url.FriendlyUrl(item.Name.ToString())" >@item.Name </a>
+    </li>
+}
+
+ 

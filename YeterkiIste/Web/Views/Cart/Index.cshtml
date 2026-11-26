@@ -1,0 +1,146 @@
+﻿
+@model Web.ViewModels.CartVM
+
+
+
+<div class="sign-detail"></div>
+
+<section class="cart_area">
+    <div class="container">
+        <div class="cart_inner">
+            <div class="table-responsive">
+
+                @if (Model.CartItems.Count > 0)
+                {
+
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Ürün</th>
+                                <th scope="col">Fiyat</th>
+                                <th scope="col">Miktar</th>
+                                <th scope="col">Toplam</th>
+                                <td></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.CartItems)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="media">
+                                            <div class="d-flex">
+                                                <img src="@item.ImageUrl" width="80" />
+                                            </div>
+                                            <div class="media-body">
+                                                <p>@item.Name</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <h5>@((item.Quantity * item.Price).ToString("c"))</h5>
+                                    </td>
+                                    <td>
+                                        <div class="product_count">
+                                            @item.Quantity
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <h5>@((item.Quantity * item.Price).ToString("c"))</h5>
+                                    </td>
+                                    <td>
+                                        <form asp-controller="Cart" asp-action="DeleteFromCart" method="post">
+                                            <input type="hidden" name="productId" value="@item.ProductId" />
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="fa fa-times fa-fw"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+
+                }
+                else
+                {
+                    <br />
+                    <div class="alert alert-warning">Sepetinizde heniz bir ürün bulunmamaktadır.</div>
+                }
+
+
+            </div>
+
+
+             <br />
+
+            @if (Model.CartItems.Count > 0)
+            {
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Ara Toplam  </th>
+                            <td>@Model.TotalPrice().ToString("c")</td>
+                        </tr>
+                        <tr>
+                            <th>Nakliye</th>
+                            <td>Ücretsiz</td>
+                        </tr>
+                        <tr>
+                            <th>Toplam </th>
+                            <td>@Model.TotalPrice().ToString("c")</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="checkout_btn_inner d-flex align-items-center">
+                    <a href="/" class="gray_btn">
+                        <i class="fa fa-arrow-circle-left fa-fw"></i>Alışverişe devam et
+                    </a>
+                    <a href="checkout" class=" button-hero"> <i class="fa fa-arrow-circle-right fa-fw"></i>Ödemeye Git</a>
+                </div>
+            }
+
+
+        </div>
+    </div>
+</section>
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+

@@ -1,0 +1,53 @@
+﻿
+@model Web.ViewModels.MyProductVM
+
+
+
+
+
+
+
+ @*@Html.Partial("Partials/BrandListPartial", Model)*@ 
+Component ile yapıldı
+<div class="top-filter-head">Markalar</div>
+<div class="common-filter">
+
+
+     
+<form method="GET">
+    @foreach (var item in Model.Brands)
+    {
+        <div class="filter-list">
+            <input type="radio" name="prm_brand" value="@item.Id" onchange="this.form.submit()"
+                   class="pixel-radio" @(Model.BrandRoute == item.Id ? "checked" : string.Empty)>
+            <label>@item.Name<span></span></label>
+        </div>
+    }
+
+    @if (Model.sortBy != null)
+    {
+        <input type="hidden" name="sortBy" value="@Model.sortBy" />
+    }
+
+    @if (Model.CategoryRoute != null)
+    {
+        <input type="hidden" name="category" value="@Model.CategoryRoute" />
+    }
+    @if (Model.BrandRoute != null)
+    {
+        <input type="hidden" name="prm_brand" value="@Model.BrandRoute" />
+    }
+    @if (Model.search != null)
+    {
+        <input type="hidden" name="search" value="@Model.search" />
+    }
+    @if (Model.minPrice != null)
+    {
+        <input type="hidden" name="minPrice" value="@Model.minPrice" />
+    }
+    @if (Model.maxPrice != null)
+    {
+        <input type="hidden" name="maxPrice" value="@Model.maxPrice" />
+    }
+</form>
+</div>

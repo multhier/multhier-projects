@@ -1,0 +1,162 @@
+﻿@model Web.ViewModels.OrderVM
+
+
+<div class="sign-detail"></div>
+    <section class="mt-5 mb-2">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <h4 class="mb-3">Ödeme Sayfası</h4>
+                    <form action="/checkout" method="post" asp-antiforgery="true">
+                        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3 ">
+                                <label asp-for="@Model.FirstName"></label>
+                                <input type="text" asp-for="@Model.FirstName" value="" class="form-control" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="@Model.LastName"></label>
+                                <input type="text" asp-for="@Model.LastName" value="" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="@Model.Address"></label>
+                            <textarea type="text" asp-for="@Model.Address" value="" class="form-control"></textarea>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="@Model.City"></label>
+                                <input type="text" asp-for="@Model.City" value="" class="form-control" />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="@Model.Email"></label>
+                                <input type="text" asp-for="@Model.Email" value="" class="form-control" />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="@Model.Phone"></label>
+                                <input type="text" asp-for="@Model.Phone" value="" class="form-control" />
+                            </div>
+                        </div>
+
+
+                        <hr class="mb-4" />
+
+                        <div class=" custom-control custom-checkbox">
+                            <input type="checkbox" id="save-info" class="custom-control-input" />
+                            <label class="custom-control-label" for="save-info">Bilgilerinizi bir sonraya kaydedin</label>
+                        </div>
+
+                        <hr class="mb-4" />
+
+
+                        <div class="d-block my-3">
+                            <div class="custom-radio custom-control">
+                                <input type="radio" id="credit" name="paymentMethod" class="custom-control-input" />
+                                <label for="credit" class="custom-control-label">Kredi Kartı</label>
+                            </div>
+                            <div class="custom-radio custom-control">
+                                <input type="radio" id="paypal" name="paymentMethod" class="custom-control-input" />
+                                <label for="paypal" class="custom-control-label">EFT</label>
+                            </div>
+                        </div>
+
+                        <h4 class="mb-3">Payment</h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="@Model.CardName"></label>
+                                <input type="text" asp-for="@Model.CardName" value="" class="form-control" />
+                            </div>
+
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="@Model.CardNumber"></label><small> &nbsp;(aşağıdaki test amaçlı bir kart numarası girin)</small>
+                                <input type="text" asp-for="@Model.CardNumber" value="" class="form-control" />
+                            </div>
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="@Model.ExpirationMonth"></label>
+                                <input type="text" asp-for="@Model.ExpirationMonth" value="" class="form-control" />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="@Model.ExpirationYear"></label>
+                                <input type="text" asp-for="@Model.ExpirationYear" value="" class="form-control" />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="@Model.ExpirationCvv"></label>
+                                <input type="text" asp-for="@Model.ExpirationCvv" value="" class="form-control" />
+                            </div>
+                        </div>
+
+                        <hr class="mb-4" />
+                        <button type="submit" class=" button-hero">Siparişi Tamamlayın</button>
+                    </form>
+                </div>
+
+
+
+
+                <div class="col-md-4">
+                    <div class="order_box">
+                        <h2>Siparişiniz</h2>
+                        <ul class="list">
+                            <li><a href="#"><h4>Ürün <span>Toplam</span></h4></a></li>
+                            @foreach (var item in Model.CartVM.CartItems)
+                            {
+                                <li><a href="#">@item.Name<span class="middle">x @item.Quantity</span> <span class="last">@item.Price.ToString("c")</span></a></li>
+                            }
+                        </ul>
+                        <ul class="list list_2">
+                            <li><a href="#">Ara Toplam <span>@Model.CartVM.TotalPrice().ToString("c")</span></a></li>
+                            <li><a href="#">Nakliye <span>Ücretsiz</span></a></li>
+                            <li><a href="#">Toplam <span>@Model.CartVM.TotalPrice().ToString("c")</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+
+
+            <br>
+            <h4>        ### Mock test cards</h4>
+            <br>
+            <br>        Test cards that can be used to simulate a *successful* payment:
+            <br>
+            <br>        Card Number      | Bank                       | Card Type
+            <br>        -----------      | ----                       | ---------
+            <br>        5890040000000016 | Akbank                     | Master Card (Debit)
+            <br>        5526080000000006 | Akbank                     | Master Card (Credit)
+            <br>        4766620000000001 | Denizbank                  | Visa (Debit)
+            <br>        4603450000000000 | Denizbank                  | Visa (Credit)
+            <br>        4729150000000005 | Denizbank Bonus            | Visa (Credit)
+            <br>        4987490000000002 | Finansbank                 | Visa (Debit)
+            <br>        5311570000000005 | Finansbank                 | Master Card (Credit)
+            <br>        9792020000000001 | Finansbank                 | Troy (Debit)
+            <br>        9792030000000000 | Finansbank                 | Troy (Credit)
+            <br>        5170410000000004 | Garanti Bankası            | Master Card (Debit)
+            <br>        5400360000000003 | Garanti Bankası            | Master Card (Credit)
+            <br>        374427000000003  | Garanti Bankası            | American Express
+            <br>        4475050000000003 | Halkbank                   | Visa (Debit)
+            <br>        5528790000000008 | Halkbank                   | Master Card (Credit)
+            <br>        4059030000000009 | HSBC Bank                  | Visa (Debit)
+            <br>        5504720000000003 | HSBC Bank                  | Master Card (Credit)
+            <br>        5892830000000000 | Türkiye İş Bankası         | Master Card (Debit)
+            <br>        4543590000000006 | Türkiye İş Bankası         | Visa (Credit)
+            <br>        4910050000000006 | Vakıfbank                  | Visa (Debit)
+            <br>        4157920000000002 | Vakıfbank                  | Visa (Credit)
+            <br>        5168880000000002 | Yapı ve Kredi Bankası      | Master Card (Debit)
+            <br>        5451030000000000 | Yapı ve Kredi Bankası      | Master Card (Credit)
+            <br>
+        </div>
+    </section>

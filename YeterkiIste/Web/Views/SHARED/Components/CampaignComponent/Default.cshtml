@@ -1,0 +1,33 @@
+﻿  
+@model  ICollection<Campaign>
+    <section class="section-margin mt-5 ">
+        <div class="section-intro  pb-lg-4  text-center">
+
+            <h2>Kaçırılmaz <span class="section-intro__style">Kampanyalar</span></h2>
+        </div>
+        <div class="owl-carousel owl-theme hero-carousel">
+
+            @foreach (var item in Model)
+            {
+                <div class="hero-carousel__slide">
+                    <img src="@item.ImageUrl" alt="" class="img-fluid">
+                    <a href="@item.Link" class="hero-carousel__slideOverlay">
+                        <h3>@Html.Raw(item.Description)</h3>
+                    </a>
+                </div>
+            }
+        </div>
+    </section>
+
+
+
+  @*<section class="section-margin1 text-center mt-5 ">
+      <div class="section-intro  pb-lg-4">
+
+          <h2>Kaçırılmaz <span class="section-intro__style">Kampanyalar</span></h2>
+      </div>*@
+
+
+
+
+ 

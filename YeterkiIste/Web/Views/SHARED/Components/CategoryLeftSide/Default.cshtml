@@ -1,0 +1,23 @@
+﻿
+
+@model IEnumerable<CategoryVM>
+
+
+<div class="sidebar-categories">
+    <div class="head">Alt Kategoriler</div>
+    <ul class="main-categories m-0 p-0 pt-1">
+ 
+        @foreach (var item in Model)
+        {
+            <li class="filter-list">
+                <i class="fa fa-angle-right fa-fw" aria-hidden="true"></i>
+                <a asp-controller="ogeler" asp-action="Index" asp-route-category="@Url.FriendlyUrl(item.Name)" 
+                   class="text-black-50 @(ViewContext.HttpContext.Request.Query["category"]== Url.FriendlyUrl(item.Name)? " ": string.Empty )">
+                    @item.Name
+                <span class="pull-right ">&nbsp;(@item.Count)</span>
+            </a>
+        </li>
+    }
+    </ul>
+</div>
+

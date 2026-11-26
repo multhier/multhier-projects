@@ -1,0 +1,17 @@
+﻿
+
+@model Web.ViewModels.CommentVM
+
+<form method="post" asp-controller="Home" asp-action="Comment">
+    <div class="form-group">
+      
+        <input asp-for="PostId" type="hidden" />
+        <input asp-for="MainCommentId" type="hidden" />
+        <input asp-for="Message"  class="form-control"   />
+    </div>
+        <button type="submit" class="btn btn-default btn-orange">Gönder</button>
+</form>
+
+
+
+

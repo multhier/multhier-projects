@@ -1,0 +1,166 @@
+﻿
+@{ Layout = null;}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>noUiSlider Example Simplified</title>
+
+
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/10.1.0/nouislider.css'>
+
+    <link rel="stylesheet" href="css/style.css">
+
+
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <div class="range-holder">
+            <input id="range-1" class="styled-range-slider" data-prefix="$" data-decimals="0" data-thousand="," data-mark="." type="range" min="0" max="500000" step="10000" />
+        </div>
+        <div class="range-holder">
+            <input id="range-2" class="styled-range-slider" type="range" decimals="0" min="1" max="5" step="1" />
+        </div>
+    </div>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/10.1.0/nouislider.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/wnumb/1.1.0/wNumb.js'></script>
+
+
+
+    <script src="js/index.js"></script>
+
+
+
+
+</body>
+
+<style>
+    .wrapper { padding: 5rem; }
+
+    .range-holder { position: relative; margin-bottom: 7rem; }
+
+    .noUi-target { font-family: "Open Sans"; font-size: 0.9rem; }
+
+    .noUi-connect { background: #005b33; background: linear-gradient(to right, #c9de96 0%, #8ab66b 44%, #005b33 100%); box-shadow: none; }
+
+    .noUi-value { margin-top: 10px; }
+
+    .noUi-tooltip { font-size: 1rem; padding: 0.4rem 0.75rem; font-weight: 600; color: #333; }
+
+</style>
+<script>
+    $(function () {
+        var initNoUiSliders = function () {
+            //get all range elems
+            var rangeSliders = $(".styled-range-slider");
+
+            //convert each rangeSlider into noUiSlider
+            rangeSliders.each(function (index) {
+                //get parent DIV
+                var htmlSliderContainer = $(this).parent();
+
+                //Create DOM element for noUiSlider
+                htmlSliderContainer.append(
+                    '<div id="styled-range-slider-' +
+                    index +
+                    '" class="styled-range-slider"></div>'
+                );
+
+                //get HTML range slider and hide it
+                var htmlSlider = $(this);
+
+                //hide HTML slider
+                htmlSlider.hide();
+
+                //get native values
+                var min = parseInt(htmlSlider.attr("min"));
+                var max = parseInt(htmlSlider.attr("max"));
+                var step = parseInt(htmlSlider.attr("step"));
+                //set HTML slider value to minimum
+                htmlSlider.val(min);
+
+                //get custom data attributes
+                var prefix = htmlSlider.data("prefix");
+                var decimals = htmlSlider.data("decimals");
+                var thousand = htmlSlider.data("thousand");
+                var mark = htmlSlider.data("mark");
+
+                //get slider element by ID
+                var noUiSliderElem = document.getElementById(
+                    "styled-range-slider-" + index
+                );
+
+                var numFormat = wNumb({
+                    mark: mark,
+                    thousand: thousand,
+                    prefix: prefix,
+                    decimals: decimals
+                });
+
+                //init noUiSlider
+                var noUiSliderInitialized = noUiSlider.create(noUiSliderElem, {
+                    connect: [true, false],
+                    tooltips: [numFormat],
+                    start: [min],
+                    step: step,
+                    range: {
+                        min: min,
+                        max: max
+                    },
+                    pips: {
+                        mode: "positions",
+                        values: [0, 100],
+                        density: 100,
+                        stepped: true,
+                        format: numFormat
+                    }
+                });
+                //end init noUiSlider
+
+                //define number format
+                var numFormat = wNumb({
+                    mark: mark,
+                    thousand: thousand,
+                    prefix: prefix,
+                    decimals: decimals
+                });
+
+                //update HTML range value on noUiSlider value change
+                noUiSliderInitialized.on("change", function (value) {
+                    htmlSlider.val(value);
+                });
+
+                //keyboard accessibility support
+                var handle = noUiSliderElem.querySelector(".noUi-handle");
+
+                handle.setAttribute("tabindex", 0);
+
+                handle.addEventListener("click", function () {
+                    this.focus();
+                });
+
+                handle.addEventListener("keydown", function (e) {
+                    var value = Number(noUiSliderElem.noUiSlider.get());
+                    switch (e.which) {
+                        case 37:
+                            noUiSliderElem.noUiSlider.set(value - step);
+                            break;
+                        case 39:
+                            noUiSliderElem.noUiSlider.set(value + step);
+                            break;
+                    }
+                });
+
+
+
+            });
+            //end each range elem
+        };
+</script>
+</html>

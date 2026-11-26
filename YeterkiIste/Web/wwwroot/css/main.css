@@ -1,0 +1,23 @@
+﻿.header_area1 { width: 100%; transition: background 0.4s, all 0.3s linear; box-shadow: 0px 10px 27px 3px rgba(221,221,221,0.3); border-top: 3px solid #eee; background: rgb(255,255,255); background: radial-gradient(circle, rgba(255,255,255,1) 12%, rgba(250,250,250,1) 38%); }
+    .header_area1 .navbar .nav .nav-item.submenu ul .nav-item:hover .nav-link { background: #384aeb; color: #fff }
+.hero-banner { background: #fafafa }
+.nav-category { background: #f7f7f7; border: 1px solid #ececec; border-bottom: none }
+.navbar-light .navbar-nav .nav-link:hover, a.nav-link.dropdown-toggle, .text-purple, .page-link, .page-link:hover, .s_product_text h2 { color: #8401ff; }
+.dropdown-menu { background: #f7f7f7; border: 1px solid #ececec; }
+.dropdown-item:hover { color: #8401ff; background: #fafafa; }
+.button-hero { background: #8401ff; border: 1px solid #8401ff; color: white }
+    .button-hero:hover { background: #f7f7f7; border: 1px solid #8401ff; color: #8401ff; }
+.hero-carousel__slideOverlay { background: #8401ff; border-radius: 30px 30px 30px 30px; -moz-border-radius: 30px 30px 30px 30px; -webkit-border-radius: 30px 30px 30px 30px; border: 0px solid #000000; }
+h1, h2, h3, h4, h5, h6 { color: #666; line-height: 1.1; }
+.card-product__imgOverlay li a { border: 0; border-radius: 0; padding: 7px 12px; background: #8401ff; }
+.bg-purple, .hero-banner::before, .price-range-area .noUi-base, .card-product__imgOverlay li a:hover, .card-product__imgOverlay li button:hover, .sidebar-categories .head, .sidebar-filter .top-filter-head, .price-range-area .noUi-horizontal .noUi-handle { background: #8401ff; }
+.page-item.active .page-link, .product_description_area .nav.nav-tabs li a.active, .list-group-item.active { background: #8401ff; border-color: #8401ff; }
+.card-body a { color: #8401ff; font-size: 16px; font-weight: bold }
+    .card-body a:hover { text-decoration: underline }
+.card-body h4 a { color: #666 }
+.card-product__imgOverlay li a, .card-product__imgOverlay li button { border: 0; border-radius: 0; padding: 7px 12px; background: #c694dc }
+.footer-bottom { background: #8401ff; border-bottom: 5px solid #222; border-top: 1px solid #222 }
+.filter-bar, .sidebar-categories .main-categories, .sidebar-filter .common-filter, .product_description_area .nav.nav-tabs { background: #f6ecff }
+.sign-detail { background: #fdfdfd; width: 100%; height: 50px }
+.login_box_area .login_box_img:before { background: rgb(55,15,92); background: linear-gradient(24deg, rgba(55,15,92,1) 0%, rgba(132,1,255,1) 100%); }
+a.nav-link.dropdown-toggle, button.nav-link, a.dropdown-item, label, div.sorting.mr-auto, p.card-product__price { color: #777; }

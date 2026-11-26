@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yeterki iste @ViewData["Title"] </title>
+    <meta name="robots" content="all" />
+    <meta name="robots" content="index,follow" />
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-9" />
+    <meta http-equiv="Content-Type" content="text/html;charset=windows-1254" />
+    <meta http-equiv="Content-Type" content="text/html;charset=x-mac-turkish" />
+
+
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+    <link href="/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/vendors/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/vendors/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/vendors/themify-icons/themify-icons.css">
+    <link rel="stylesheet" href="/vendors/nice-select/nice-select.css">
+    <link rel="stylesheet" href="/vendors/owl-carousel/owl.theme.default.min.css">
+    <link rel="stylesheet" href="/vendors/owl-carousel/owl.carousel.min.css">
+    <link rel="stylesheet" href="/vendors/linericon/style.css">
+    <link rel="stylesheet" href="/vendors/nice-select/nice-select.css">
+    <link rel="stylesheet" href="/vendors/nouislider/nouislider.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+ 
+<link href="/css/main.css" rel="stylesheet" />
+
+</head>
+<body>
+ 
+
+    <header class="header_area1">
+        <div class="main_menu">
+            <div class="container">
+
+
+                <nav class="navbar navbar-expand-lg navbar-light nav-shop">
+                    <a class="navbar-brand logo_h ml-0 mr-auto" href="/">
+                        <img src="/images/logo-head.png" width="60" /><img src="/images/logo.png" alt="" height="75">
+                    </a>
+
+
+                    <ul class="nav-shop">
+
+
+
+                        <li class="nav-item submenu dropdown p-0 m-0">
+                
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                        <a href="/#" class="nav-link dropdown-toggle"  data-toggle="dropdown" role="button" aria-haspopup="true"  aria-expanded="false"> <i class="fa fa-user"></i><span class="caret"></span> &nbsp;Üye Paneli </a>
+
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item " href="/Member/Index">Üye Sayfası</a> 
+                                    <a class="dropdown-item " href="/orders">Siparişiniz</a>
+                                    <a class="dropdown-item" href="/Home/logout">Çıkış</a>
+                                </div>
+                            }
+                            else
+                            {
+                              <a href="/#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                               aria-expanded="false"> <i class="fa fa-user"></i><span class="caret"></span> &nbsp;Giriş Yap </a>
+
+
+
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item" href="/Home/SignIn">Login</a>
+                                    <a class="dropdown-item" href="/Home/SignUp">Hesap Oluştur</a>
+                                </div>
+                            }
+                        </li>
+
+                        <li class="nav-item">  <button onclick="location.href='/Cart'" class="nav-link"> <i class="ti-shopping-cart"></i> &nbsp;Sepet</button> </li>
+
+
+
+                    </ul>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </nav>
+                <nav class="navbar navbar-expand-md navbar-light nav-category">
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            @await Component.InvokeAsync("CategoryParent")
+                        </ul>
+
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+
+
+    <main class="site-main">
+        @if (TempData["tutucu1"] != null)
+        {
+            <partial name="Partials/resultmessage" model="@(TempData.Get<Web.ViewModels.ResultMessage>("tutucu1"))" />
+        }
+        @RenderBody()
+    </main>
+
+
+
+
+
+
+    <script src="/vendors/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/vendors/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/vendors/skrollr.min.js"></script>
+    <script src="/vendors/owl-carousel/owl.carousel.min.js"></script>
+    <script src="/vendors/nice-select/jquery.nice-select.min.js"></script>
+    <script src="/vendors/nouislider/nouislider.min.js"></script>
+
+
+
+
+
+    <footer class="footer">
+ 
+
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row d-flex">
+                    <p class="col-lg-12 footer-text text-center">
+                        Copyright &copy;
+                        <script>document.write(new Date().getFullYear());</script> All rights reserved <br />
+
+                        Thanks to <a href="https://www.pexels.com/" rel="nofollow" target="_blank" class="text-white">Pexels</a> I've changed most of  images<br />
+
+                        This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank" rel="nofollow" class="text-white">Colorlib</a><br />
+
+
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+    <script src="/vendors/jquery.ajaxchimp.min.js"></script>
+    <script src="/vendors/mail-script.js"></script>
+    <script src="/js/main.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,231 @@
+﻿@model ProductPagesVM
+
+
+
+
+
+<!-- ================ category section start ================= -->
+<section class="section-margin--small mb-5">
+    <div class="container">
+        <div class="row">
+
+
+            <div class="col-xl-3 col-lg-4 col-md-5">
+
+
+
+                @await Component.InvokeAsync("CategoryLeftSide")
+
+
+
+
+
+                <div class="sidebar-filter">
+                    <div class="top-filter-head">Product Filters</div>
+
+
+
+
+                    <hr />
+                    <div class="clearfix"></div>
+
+
+
+
+
+                </div>
+
+
+
+
+
+
+
+            </div>
+
+
+
+
+            <div class="col-xl-9 col-lg-8 col-md-7">
+                <p class="woocommerce-result-count">
+                    @if (Model.E_Page.TotalItems > 0)
+                    {
+                        @:This page stores @Model.E_Page.TotalItems product/s
+                    }
+                    else
+                    {
+                        @:Unfortunetly there is no product
+                    }
+
+                </p>
+
+                <h1>PRODUCT BURDA</h1>
+                <section class="lattest-product-area pb-40 category-list">
+                    <div class="row">
+
+                        @foreach (var item in Model.Products)
+                        {
+                            @Html.Partial("Partials/Products", item)
+
+                        }
+
+                    </div>
+
+
+
+
+
+
+                    <ul class="pagination">
+                        @if (Model.E_Page.CurrentPage > 1)
+                        {
+                            <li class="page-item"> <a class="page-link" href="/urunler/Index">First</a>  </li>
+
+                            @*<li class="page-item"> <a class="page-link" href="/urunler/Index?page=@(Model.E_Page.CurrentPage - 1)">Previous</a> </li>*@
+                            <li class="page-item"> <a class="page-link" asp-controller="urunler" asp-action="Index" asp-route-page="@(Model.E_Page.CurrentPage - 1)" asp-route-category="@Model.Category">Previous</a> </li>
+                        }
+
+
+                        @for (var i = 1; i <= Model.E_Page.TotalPages(); i++)
+
+                        {
+                            <li class="@(i == Model.E_Page.CurrentPage ? "page-item  active" : "page-item ")">
+                                <a class="page-link" asp-controller="urunler" asp-action="Index" asp-route-page="@i" asp-route-category="@Model.Category">@i</a>
+                            </li>
+                        }
+
+
+                        @if (Model.E_Page.CurrentPage < Model.E_Page.TotalPages())
+                        {
+                            @*<li class="page-item"> <a class="page-link" href="/urunler/Index?page=@(Model.E_Page.CurrentPage + 1)">Next</a> </li>*@
+
+                            <li class="page-item"> <a class="page-link" asp-controller="urunler" asp-action="Index" asp-route-page="@(Model.E_Page.CurrentPage + 1)" asp-route-category="@Model.Category">Next</a> </li>
+
+                            @*<li class="page-item"> <a class="page-link" href="/urunler/Index?page=@(Model.E_Page.TotalPages())">Last</a> </li>*@
+                        }
+                    </ul>
+
+
+
+
+
+
+                    @*<div page-action="Index" E_Page="@Model.E_Page" class="style-page" style="background-color:red;"></div>*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </section>
+
+                <!-- End Best Seller -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ================ category section end ================= -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="content">
+    <section id="shop" class="container">
+        <div class="row">
+
+            <!-- sidebar start -->
+            <div id="sidebar" class="col-md-3">
+
+                <div class="widget">
+                    <form class="form-inline">
+                        <div class="input-group">
+                            <input type="text" class="form-control input-lg" placeholder="Search...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-lg" type="submit"><i class="fa fa-search"></i></button>
+                            </span>
+                        </div>
+
+                    </form>
+                </div>
+
+
+
+                @*@await  Component.InvokeAsync("LeftCategoryMenu")
+
+                    @await  Component.InvokeAsync("FeaturedProducts")*@
+
+
+            </div>
+            <!-- sidebar end -->
+            <!-- right column start -->
+            <div class="col-md-9">
+                <div class="row">
+
+                    <div class="col-md-12 wow fadeIn">
+                        <div class="row product-results">
+                            <div class="product-results">
+                                <div class="col-xs-8">
+                                    @*<p class="woocommerce-result-count">This page contains  @Model.Pagination.TotalItems products </p>*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    @*@foreach (var item in Model.Products)
+                        {
+                               @Html.Partial("Partial/_ProductItems", item)
+                        }
+
+
+                                    <div  page-action="Index"  my_attr="@Model.Pagination" class="style-page"></div>*@
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+
+<br />
+<br />
+<br />
+<hr />
+<br />
+<br />
+<br /> 

@@ -1,0 +1,85 @@
+﻿@model Web.ViewModels.LoginVM
+
+
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script src="/lib/jquery-validate/jquery.validate.min.js"></script>
+<script src="/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+
+
+
+<!--================Login Box Area =================-->
+<section class="login_box_area pt-2 pb-2 ">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="login_box_img">
+                    <div class="hover">
+                        <h4>Websitemizde yeni misiniz?</h4>
+                        <p>Sitemize üye olarak, alışverişinize güvenle başlayabilirsiniz.Keyifli alışverişler dileriz.</p>
+                        <a class="button button-account" href="/Home/SignUp">Üye ol</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="login_form_inner">
+                    <h3>Log in to enter</h3>
+                    <form class="row login_form" asp-action="SignIn">
+                        <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
+                        @if (Model.ReturnUrl != null)
+                        {
+                            <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
+                        }
+
+                        <div class="col-md-12 form-group">
+                            <input type="text" class="form-control" asp-for="Email" placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email'" />
+                            <br /><span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <input type="password" class="form-control" asp-for="Password" placeholder="Şifre" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'" />
+                            <br /><span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+                        @*<div class="col-md-12 form-group">
+            <div class="creat_account">
+                <input type="checkbox" id="f-option2" name="selector">
+                <label for="f-option2">Keep me logged in</label>
+            </div>
+        </div>*@
+                        <div class="col-md-12 form-group">
+                            <button type="submit" value="submit" class="button-hero">Log In</button>
+                            @*<a href="#">Forgot Password?</a>*@
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--================End Login Box Area =================-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

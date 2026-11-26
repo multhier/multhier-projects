@@ -1,0 +1,17 @@
+# Derlenmis ciktilar
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+# Gizli ayarlar: bunlar asla commit edilmemeli
+secrets.json
+appsettings.Local.json
+appsettings.*.Local.json
+
+# Yerel notlar
+DEGISIKLIKLER.diff
+
+# Kullanici yukledigi dosyalar (kisisel veri)
+Web/wwwroot/images/user/

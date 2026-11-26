@@ -1,0 +1,99 @@
+﻿
+@model Web.ViewModels.UserVM
+
+ 
+
+
+<div class="product_image_area " style="background: #fdfdfd">
+    <div class="container">
+        <div class="row s_product_inner">
+
+
+
+            <div class="col-6 col-lg-4">
+                @Html.Partial("Partials/UserProfileList")
+                <br /><div class="clearfix"></div>
+            </div>
+
+            <div class="col-12 col-lg-8">
+
+                <div class="animsition">
+                    <div>
+
+
+                        <table class="table table-responsive table-borderless  d-block float-none">
+                            <tr>
+                                <td><b>Kullanıcı Adınız</b></td>
+                                <td>@Model.UserName</td>
+                            </tr>
+
+                            <tr>
+                                <td><b>Email</b></td>
+                                <td>@Model.Email</td>
+                            </tr>
+
+                            <tr>
+                                <td><b>Telefon Numaranız</b></td>
+                                <td>
+                                    @if (!String.IsNullOrEmpty(Model.PhoneNumber))
+                                    {
+                                        @Model.PhoneNumber
+                                    }
+                                    else
+                                    {
+                                        <p>Henüz bir bilgi girilmemiştir.</p>
+                                    }
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><b>Şehir</b></td>
+                                <td>
+                                    @if (!String.IsNullOrEmpty(Model.City))
+                                    {
+                                        @Model.City
+                                    }
+                                    else
+                                    {
+                                        <p>Henüz bir bilgi girilmemiştir.</p>
+                                    }
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><b>Doğum Tarihiniz</b></td>
+                                <td>
+                                    @if (Model.BirthDate != null)
+                                    {
+                                        @Model.BirthDate?.ToShortDateString()
+                                    }
+                                    else
+                                    {
+                                        <p>Henüz bir bilgi girilmemiştir.</p>
+                                    }
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><b>Görsel</b></td>
+                                <td>
+                                    @if (Model.ImageUrl != "")
+                                    {
+                                        <img src="/images/user/@Model.ImageUrl" width="50" />
+                                    }
+                                    else
+                                    {
+                                        <p>Henüz bir bilgi girilmemiştir.</p>
+                                    }
+                                </td>
+                            </tr>
+                  
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
