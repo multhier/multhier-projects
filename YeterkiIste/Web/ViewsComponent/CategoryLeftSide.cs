@@ -22,7 +22,7 @@ namespace Web.ViewsComponent
             var rowsId = uow.Categoryuow.GetAll().Where(b => Url.FriendlyUrl(b.Name) == ustkategori).Select(x => x.Id).FirstOrDefault();
 
 
-            var categoryside = uow.Categoryuow.GetAllWithQuery().Where(x => x.ParentId.Equals(rowsId) &&  x.IsActive).Select(x => new CategoryVM
+            var categoryside = uow.Categoryuow.GetActiveChildrenWithProducts(rowsId).Select(x => new CategoryVM
             {
                 Id = x.Id,
                 Name = x.Name,

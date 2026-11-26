@@ -1,6 +1,5 @@
 ﻿using Bll.Abstract;
-using Dal.Abstract;
-using Microsoft.EntityFrameworkCore;
+using Bll.Abstract.Repositories;
 using Model;
 using System;
 using System.Collections.Generic;
@@ -41,16 +40,6 @@ namespace Bll.Concrete
         public Category GetById(int id)
         {
             return repo.Get(x => x.Id == id);
-        }
-        public DbSet<Category> Tablo()
-        {
-            return repo.Tablo();
-        }
- 
-
-        public IQueryable<Category> GetAllWithQuery()
-        {
-            return repo.GetAllWithIQueryable();
         }
 
 
@@ -139,6 +128,11 @@ namespace Bll.Concrete
                 new Category{Id=3, Name="Choco Chips",  IsActive=true,AddedTime= DateTime.Now,ImageUrl ="\\Images\\Nuts.png"},
             };
         }
+        public ICollection<Category> GetActiveChildrenWithProducts(int parentId)
+        {
+            return repo.GetActiveChildrenWithProducts(parentId);
+        }
+
 
         public Category GetbyName(string name)
         {

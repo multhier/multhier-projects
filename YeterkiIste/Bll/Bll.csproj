@@ -4,8 +4,9 @@
 	  <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <!-- Uygulama katmanı: yalnızca iç katmanlara (Core, Model) bağımlıdır. Dal'a referans YOK. -->
   <ItemGroup>
-    <ProjectReference Include="..\Dal\Dal.csproj" />
+    <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\Model\Model.csproj" />
   </ItemGroup>
 

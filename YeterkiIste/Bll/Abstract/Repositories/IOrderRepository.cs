@@ -2,7 +2,7 @@
 using Model;
 using System.Collections.Generic;
 
-namespace Dal.Abstract
+namespace Bll.Abstract.Repositories
 {
     public interface IOrderRepository : IBaseRepository<Order>
     {

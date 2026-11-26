@@ -21,7 +21,7 @@ namespace Web.ViewsComponent
             string ustkategori = ViewContext.RouteData.Values["ustcategoryname"].ToString();
             var rowsId = uow.Categoryuow.GetAll().Where(b => Url.FriendlyUrl(b.Name) == ustkategori).Select(x => x.Id).FirstOrDefault();
 
-            var brandside = uow.Branduow.GetAllWithQuery().Where(x => x.CategoryId.Equals(rowsId));
+            var brandside = uow.Branduow.GetAll(x => x.CategoryId == rowsId);
 
 
 

@@ -1,5 +1,5 @@
 ﻿using Bll.Abstract;
-using Dal.Abstract;
+using Bll.Abstract.Repositories;
 using Model;
 using System;
 using System.Collections.Generic;
@@ -26,11 +26,6 @@ namespace Bll.Concrete
         public ICollection<Brand> GetAll(Expression<Func<Brand, bool>> filter = null)
         {
             return repo.GetAll();
-        }
-
-        public IQueryable<Brand> GetAllWithQuery()
-        {
-            return repo.GetAllWithIQueryable();
         }
 
         public Brand GetById(int id)

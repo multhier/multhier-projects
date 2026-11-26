@@ -5,7 +5,7 @@ using System.Collections.Generic;
  
 using System.Text;
 
-namespace Dal.Abstract
+namespace Bll.Abstract.Repositories
 {
     public interface IColorRepository : IBaseRepository<Color>
     {

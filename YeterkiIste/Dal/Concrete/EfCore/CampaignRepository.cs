@@ -1,11 +1,11 @@
-﻿using Core.Concrete;
-using Dal.Abstract;
+using Bll.Abstract.Repositories;
+using Core.Abstract;
 using Model;
 
 namespace Dal.Concrete.EfCore
 {
 
-    public class CampaignRepository : BaseRepository<Campaign,AppDbContext>, ICampaignRepository
+    public class CampaignRepository : BaseEfRepository<Campaign>, ICampaignRepository
     {
         public CampaignRepository(AppDbContext prm):   base (prm)
         {

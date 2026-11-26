@@ -1,12 +1,12 @@
 ﻿using Bll.Abstract;
-using Dal.Abstract;
+using Bll.Abstract.Repositories;
 using Model;
 using System;
 using System.Collections.Generic;
 
 namespace Bll.Concrete
 {
-    class OrderService : IOrderService
+    public class OrderService : IOrderService
     {
         IOrderRepository repo;
         public OrderService(IOrderRepository prm)
@@ -27,7 +27,7 @@ namespace Bll.Concrete
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            // Kaynak tutulmuyor; no-op.
         }
 
   

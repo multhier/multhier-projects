@@ -10,7 +10,6 @@ namespace Bll.Abstract
     public interface IBrandService : IDisposable
     {
         ICollection<Brand> GetAll(Expression<Func<Brand, bool>> filter = null);
-        IQueryable<Brand> GetAllWithQuery();
         Brand Get();
         Brand GetById(int id);
 

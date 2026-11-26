@@ -12,7 +12,6 @@ namespace Bll.Abstract
     public interface IProductService : IDisposable
     {
         ICollection<Product> GetAll(Expression<Func<Product, bool>> filter = null);
-        IQueryable<Product> GetAllWithQuery();
         ICollection<Product> GetProductsIncludeCategory();
         ICollection<Product> GetProductDetails();
         Product GetProductDetail(int id);

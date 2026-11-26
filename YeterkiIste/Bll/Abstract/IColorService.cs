@@ -10,7 +10,6 @@ namespace Bll.Abstract
     public interface IColorService : IDisposable
     {
         ICollection<Color> GetAll(Expression<Func<Color, bool>> filter = null);
-        IQueryable<Color> GetAllWithQuery();
         Color Get();
         Color GetById(int id);
          

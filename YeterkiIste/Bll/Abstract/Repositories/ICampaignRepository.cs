@@ -1,7 +1,7 @@
 ﻿using Core.Abstract;
 using Model;
 
-namespace Dal.Abstract
+namespace Bll.Abstract.Repositories
 {
     public interface ICampaignRepository : IBaseRepository<Campaign>
     {

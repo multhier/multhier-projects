@@ -1,10 +1,10 @@
-﻿using Core.Concrete;
-using Dal.Abstract;
+using Bll.Abstract.Repositories;
+using Core.Abstract;
 using Model;
 
 namespace Dal.Concrete.EfCore
 {
-    public  class ColorRepository : BaseRepository<Color, AppDbContext>, IColorRepository
+    public  class ColorRepository : BaseEfRepository<Color>, IColorRepository
     {
         public ColorRepository(AppDbContext prm) : base(prm)
         {

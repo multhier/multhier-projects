@@ -1,11 +1,12 @@
-﻿using Core.Abstract;
+using Core.Abstract;
 using Model;
 using Model.Comments;
+using Bll.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Dal.Abstract
+namespace Bll.Abstract.Repositories
 {
     public interface IProductRepository : IBaseRepository<Product>
     {
@@ -13,5 +14,8 @@ namespace Dal.Abstract
         ICollection<Product> GetProductDetails();
         Product GetProductDetail(int id);
         void AddSubComment(SubComment comment);
+
+        /// <summary>Filtreleme, sıralama ve sayfalama veritabanında yapılır.</summary>
+        ProductSearchResult Search(ProductSearchCriteria criteria);
     }
 }

@@ -1,4 +1,3 @@
-﻿using Microsoft.EntityFrameworkCore;
 using Model;
 using System;
 using System.Collections.Generic;
@@ -11,8 +10,8 @@ namespace Bll.Abstract
 {
    public interface ICategoryService :IDisposable
     {
+        ICollection<Category> GetActiveChildrenWithProducts(int parentId);
         ICollection<Category> GetAll(Expression<Func<Category, bool>> filter = null);
-        IQueryable<Category> GetAllWithQuery();
         Category Get(Expression<Func<Category, bool>> filter = null);
         Category GetById(int id);
 
@@ -25,7 +24,6 @@ namespace Bll.Abstract
         void Delete(Category prm);
         Category SoftDelete(Category prm);
         Task DeleteAsync(Category prm);
-        DbSet<Category> Tablo();
          Category GetbyName(string name);
 
     }

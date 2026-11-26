@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Dal.Abstract
+namespace Bll.Abstract.Repositories
 {
     public interface IBrandRepository : IBaseRepository<Brand>
     {

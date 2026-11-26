@@ -1,5 +1,5 @@
 ﻿using Bll.Abstract;
-using Dal.Abstract;
+using Bll.Abstract.Repositories;
 using Model;
 using System;
 using System.Collections.Generic;
@@ -26,11 +26,6 @@ namespace Bll.Concrete
         public ICollection<Color> GetAll(Expression<Func<Color, bool>> filter = null)
         {
             return repo.GetAll();
-        }
-
-        public IQueryable<Color> GetAllWithQuery()
-        {
-            throw new NotImplementedException();
         }
 
         public Color GetById(int id)

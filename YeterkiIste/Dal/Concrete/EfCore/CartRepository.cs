@@ -1,5 +1,5 @@
-﻿using Core.Concrete;
-using Dal.Abstract;
+using Bll.Abstract.Repositories;
+using Core.Abstract;
 using Microsoft.EntityFrameworkCore;
 using Model;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace Dal.Concrete.EfCore
 {
-    public class CartRepository : BaseRepository<Cart, AppDbContext>, ICartRepository
+    public class CartRepository : BaseEfRepository<Cart>, ICartRepository
     {
         public CartRepository(AppDbContext context) : base(context)
         {

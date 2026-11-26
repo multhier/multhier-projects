@@ -1,5 +1,5 @@
-﻿using Core.Concrete;
-using Dal.Abstract;
+using Bll.Abstract.Repositories;
+using Core.Abstract;
 using Microsoft.EntityFrameworkCore;
 using Model;
 using System;
@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Dal.Concrete.EfCore
 {
-   public  class OrderRepository : BaseRepository<Order, AppDbContext>, IOrderRepository
+   public  class OrderRepository : BaseEfRepository<Order>, IOrderRepository
     {
         public OrderRepository(AppDbContext prm) : base(prm)
         {

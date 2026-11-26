@@ -1,7 +1,9 @@
 ﻿using System;
 using Bll.Abstract;
 using Bll.Concrete;
+using Bll.Abstract.Repositories;
 using Dal.Concrete;
+using Dal.Concrete.EfCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,6 +33,22 @@ namespace Web
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
             services.Configure<IyzicoSettings>(Configuration.GetSection("Iyzico"));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            // Repository ve servis kayitlari: bagimliliklar arayuzler uzerinden cozulur.
+            services.AddScoped<IBrandRepository, BrandRepository>();
+            services.AddScoped<ICampaignRepository, CampaignRepository>();
+            services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IColorRepository, ColorRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+
+            services.AddScoped<IBrandService, BrandService>();
+            services.AddScoped<ICampaignService, CampaignService>();
+            services.AddScoped<ICartService, CartService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IColorService, ColorService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IProductService, ProductService>();
             services.AddIdentity<AppUser, AppRole>(x =>
             {
                 x.User.RequireUniqueEmail = true;

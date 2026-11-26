@@ -7,7 +7,6 @@ using Bll.Concrete;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using Model;
 using Model.Comments;
 using Web.Models;
