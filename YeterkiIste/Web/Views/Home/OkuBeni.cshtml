@@ -41,9 +41,16 @@
             Visual Studio'yu açalım ve App adında bir solution (çözüm) oluşturalım.(isim,isteğe bağlıdır)<br />
             <a href="/images/code-opening-visual-studio-01.png"><img src="/images/code-opening-visual-studio-01.png" width="250" /></a><br />
             Projede Soğan Mimarisi (Onion Architecture) uygulanmaktadır: bağımlılıklar dıştan içe doğru akar.<br />
-            Sıralama içten dışa: Core &larr; Model &larr; Bll &larr; Dal &larr; Web. İç katmanlar dış katmanları tanımaz.<br />
-            Projede bilgilere, Interfaceler aracılığıyla erişilir. Somut sınıflar Dependency Injection (Startup.cs) ile bağlanır.<br />
-            Repository arayüzleri EF tiplerini (DbSet, IQueryable) içermediği için veri erişimi teknolojisi (EF, Dapper vb.) yalnızca Dal katmanında değiştirilerek değiştirilebilir.<br />
+            İç katmanlar dış katmanları tanımaz. Projeler arası bağımlılıklar (A &rarr; B: A, B'yi kullanır):<br />
+            &bull; <b>Core</b> (en iç, ortak soyutlamalar: IData, IBaseRepository) &rarr; hiçbir proje<br />
+            &bull; <b>Model</b> (Domain: entity sınıfları) &rarr; Core<br />
+            &bull; <b>Bll</b> (Application: servisler, servis ve repository arayüzleri) &rarr; Core, Model<br />
+            &bull; <b>Dal</b> (Infrastructure: EF, AppDbContext, repository uygulamaları, Identity kullanıcısı) &rarr; Core, Model, Bll<br />
+            &bull; <b>Web</b> (Presentation: MVC) &rarr; Bll, ayrıca yalnızca Startup.cs ve Identity kullanıcısı için Dal<br />
+            Projede bilgilere, Interfaceler aracılığıyla erişilir. Her katman kendi kayıtlarını yapar
+            (Bll: <i>AddBusinessServices()</i>, Dal: <i>AddDataAccess()</i>); Startup.cs bu metotları çağıran composition root'tur.<br />
+            Repository arayüzleri EF tiplerini (DbSet, IQueryable) içermediği için veri erişimi teknolojisi büyük ölçüde Dal katmanından değiştirilebilir.
+            Ancak Expression tabanlı filtreler (GetAll(x =&gt; ...)) ve EF'ye bağlı Identity yapısı, EF dışı bir teknolojiye geçişte ek iş gerektirir.<br />
         </p>
         <div class="guncel">
             <b>Güncel not:</b> Projenin ilk hâlinde bu hedef tam uygulanmamıştı: Bll, Dal'a bağımlıydı, Core katmanı EF paketine bağlıydı
@@ -51,7 +58,10 @@
             aşağıdaki bölümlerde değişen yerler bu sarı kutularla belirtilmiştir.<br />
             SOLID için de durum aynıdır: hedef olarak benimsenmiştir, ancak bazı servislerde (ör. CategoryService) arayüzün bazı metotları
             hâlâ uygulanmamış (NotImplementedException) olduğundan tam uyum yoktur.<br />
-            Bilinen istisna: Model katmanındaki AppUser, IdentityUser'dan türediği için Identity paketine bağlıdır.
+            Identity kullanıcısı (AppUser, AppRole) Model'den Dal/Identity klasörüne taşındı; böylece Model hiçbir dış pakete bağlı değildir.
+            Web'in Dal'a referansı yalnızca iki iş için kalmıştır: Startup.cs'teki kayıt çağrıları ve Identity kullanıcı tipi.
+            Bu, .NET'teki yaygın soğan/temiz mimari şablonlarında da kabul edilen bir composition root istisnasıdır;
+            controller'lar Dal'ın somut sınıflarını (repository, DbContext) kullanmaz.
         </div>
         <h4>Proje 5 katmandan oluşur.</h4>
         <a href="/images/code-projeapp01.JPG"><img src="/images/code-projeapp01.JPG" alt="" /></a>
@@ -512,7 +522,9 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
                 Projede artık bu yöntem kullanılmaktadır. Önerilen ve güvenli yol budur.
             </h5>
             <div class="guncel">
-                <b>Güncel not:</b> Startup.cs'te: <i>services.AddDbContext&lt;AppDbContext&gt;(o =&gt; o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));</i><br />
+                <b>Güncel not:</b> Startup.cs'te: <i>services.AddDataAccess(Configuration.GetConnectionString("DefaultConnection"));</i><br />
+                Bu metot Dal/DependencyInjection.cs içindedir ve DbContext'i <i>AddDbContext&lt;AppDbContext&gt;(o =&gt; o.UseSqlServer(connectionString))</i> ile kaydeder;
+                bağlantı cümlesi boşsa uygulama açılırken net bir hata verir.<br />
                 Geliştirme ortamında şifreli bağlantı cümlesini appsettings.json yerine User Secrets'a yazın
                 (Web klasöründe: <i>dotnet user-secrets set "ConnectionStrings:DefaultConnection" "..."</i>),
                 sunucuda ise ortam değişkeni kullanın (<i>ConnectionStrings__DefaultConnection</i>).
@@ -1079,11 +1091,10 @@ public class UnitOfWork : IUnitOfWork
             <b>Güncel not:</b> Aşağıda anlatılan yöntemde UnitOfWork servisleri <i>new CategoryService(new CategoryRepository(context))</i> ile kendisi oluşturur.
             Bu, Bll'i Dal'ın somut sınıflarına bağımlı yapar ve Dependency Inversion (SOLID'deki D) ilkesine aykırıdır.<br />
             Projede artık UnitOfWork <i>Dal/Concrete/UnitOfWork.cs</i> içindedir ve servisleri constructor üzerinden alır;
-            tüm repository ve servis kayıtları Startup.cs'te yapılır:<br />
-            <i>services.AddScoped&lt;ICategoryRepository, CategoryRepository&gt;();</i><br />
-            <i>services.AddScoped&lt;ICategoryService, CategoryService&gt;();</i><br />
-            <i>services.AddScoped&lt;IUnitOfWork, UnitOfWork&gt;();</i> (diğer tüm repository ve servisler için de aynı şekilde)<br />
-            Ayrıca <i>AddDbContext&lt;AppDbContext&gt;()</i> artık bağlantı cümlesiyle birlikte çağrılır (yukarıdaki Dal bölümüne bakın).
+            kayıtları her katman kendisi yapar:<br />
+            <i>Bll/DependencyInjection.cs</i> &rarr; <i>AddBusinessServices()</i>: <i>services.AddScoped&lt;ICategoryService, CategoryService&gt;();</i> vb.<br />
+            <i>Dal/DependencyInjection.cs</i> &rarr; <i>AddDataAccess(connectionString)</i>: DbContext, <i>services.AddScoped&lt;ICategoryRepository, CategoryRepository&gt;();</i> vb. ve <i>services.AddScoped&lt;IUnitOfWork, UnitOfWork&gt;();</i><br />
+            Startup.cs yalnızca bu iki metodu çağırır; Identity için de <i>.AddDataAccessStores()</i> kullanılır, böylece Web AppDbContext'i tanımaz.
             Aşağıdaki anlatım, projenin ilk hâlini göstermektedir.
         </div><br /><br />
 

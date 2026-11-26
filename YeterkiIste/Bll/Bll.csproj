@@ -4,6 +4,11 @@
 	  <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <!-- Yalnızca DI soyutlamaları (AddBusinessServices için); somut bir container veya altyapı paketi değil. -->
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.4" />
+  </ItemGroup>
+
   <!-- Uygulama katmanı: yalnızca iç katmanlara (Core, Model) bağımlıdır. Dal'a referans YOK. -->
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />

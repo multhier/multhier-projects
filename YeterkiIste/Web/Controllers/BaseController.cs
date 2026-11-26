@@ -1,4 +1,5 @@
-﻿using Bll.Abstract;
+﻿using Dal.Identity;
+using Bll.Abstract;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Model;

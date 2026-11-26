@@ -1,4 +1,5 @@
-﻿using Bll.Abstract;
+﻿using Dal.Identity;
+using Bll.Abstract;
 using Iyzipay;
 using Iyzipay.Model;
 using Iyzipay.Request;

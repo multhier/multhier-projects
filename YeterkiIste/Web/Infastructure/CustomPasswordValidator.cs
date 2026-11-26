@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Dal.Identity;
+using Microsoft.AspNetCore.Identity;
 using Model;
 using System.Collections.Generic;
 using System.Threading.Tasks;

@@ -4,10 +4,7 @@
 	  <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.4" />
-  </ItemGroup>
-
+  <!-- Domain katmanı: yalnızca Core'a bağlıdır, hiçbir dış pakete (EF, Identity) bağımlı değildir. -->
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
