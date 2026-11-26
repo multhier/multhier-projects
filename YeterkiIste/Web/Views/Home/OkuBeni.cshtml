@@ -25,6 +25,10 @@
     .bgc-lbrown { background: #93857b }
 
     .bgc-lturkuaz { background: #c4ffff }
+
+    /* Sonradan eklenen düzeltme notları */
+    .guncel { background: #fff5bb; border-left: 5px solid #f0a500; padding: 8px 12px; margin: 10px 0; color: #333; }
+    .guncel b:first-child { color: #b36b00; }
 </style>
 
 <div class="readme" style="width:100%; margin:0 auto; text-align:left;">
@@ -36,11 +40,19 @@
             <h4>Hoşgeldiniz</h4><br />
             Visual Studio'yu açalım ve App adında bir solution (çözüm) oluşturalım.(isim,isteğe bağlıdır)<br />
             <a href="/images/code-opening-visual-studio-01.png"><img src="/images/code-opening-visual-studio-01.png" width="250" /></a><br />
-            Proje de, Soğan Mimarisi Prensibi uygulanmaktadır. <br />
-            Solid prensiblerine uyun kod ve düzen sağlanacaktır.<br />
-            Projede bilgilere, Interfaceler aracılığıyla erişilecek. Onlar, üzerinden nesneler çağırılacak.<br />
-            Proje, metotların gövdelerine değil, imzalarına esasen gelişeceği için Ef, Dapper, Nhybernate vsb. gibi teknolojilere esneklik sağlanmaktadır.<br />
+            Projede Soğan Mimarisi (Onion Architecture) uygulanmaktadır: bağımlılıklar dıştan içe doğru akar.<br />
+            Sıralama içten dışa: Core &larr; Model &larr; Bll &larr; Dal &larr; Web. İç katmanlar dış katmanları tanımaz.<br />
+            Projede bilgilere, Interfaceler aracılığıyla erişilir. Somut sınıflar Dependency Injection (Startup.cs) ile bağlanır.<br />
+            Repository arayüzleri EF tiplerini (DbSet, IQueryable) içermediği için veri erişimi teknolojisi (EF, Dapper vb.) yalnızca Dal katmanında değiştirilerek değiştirilebilir.<br />
         </p>
+        <div class="guncel">
+            <b>Güncel not:</b> Projenin ilk hâlinde bu hedef tam uygulanmamıştı: Bll, Dal'a bağımlıydı, Core katmanı EF paketine bağlıydı
+            ve UnitOfWork servisleri <i>new</i> ile oluşturuyordu. Proje sonradan bu kurallara uyacak şekilde yeniden düzenlendi;
+            aşağıdaki bölümlerde değişen yerler bu sarı kutularla belirtilmiştir.<br />
+            SOLID için de durum aynıdır: hedef olarak benimsenmiştir, ancak bazı servislerde (ör. CategoryService) arayüzün bazı metotları
+            hâlâ uygulanmamış (NotImplementedException) olduğundan tam uyum yoktur.<br />
+            Bilinen istisna: Model katmanındaki AppUser, IdentityUser'dan türediği için Identity paketine bağlıdır.
+        </div>
         <h4>Proje 5 katmandan oluşur.</h4>
         <a href="/images/code-projeapp01.JPG"><img src="/images/code-projeapp01.JPG" alt="" /></a>
         <p>
@@ -92,8 +104,12 @@
         </p>
         <h5>
             Entity Framework, ManytoMany ilişkili tabloları, otomatik algılar ve kendisi oluştururdu.<br />
-            Fakat Entity Framework Core henüz bu yapıyı desteklemiyor. Fluent Api ile kendimiz belirteceğiz.
+            Fakat bu projede kullanılan Entity Framework Core 3.1 bu yapıyı desteklemiyor. Fluent Api ile kendimiz belirteceğiz.
         </h5>
+        <div class="guncel">
+            <b>Güncel not:</b> EF Core 5.0 ve sonrası, ara tablo sınıfı yazmadan many-to-many ilişkiyi otomatik destekler.
+            Bu kısıtlama yalnızca EF Core 3.1 ve öncesi için geçerlidir.
+        </div>
 
 
 <pre class="prettyprint bgc-lblue">
@@ -331,6 +347,9 @@ namespace Model
             Bu sınıf DbContext'ten kalıtım alacak.<br />
             override yazıp ilgili metotlara bakıldığında ,şimdilik gerekli olan Configure ve Model_Creating metotları çağrılıp ezilir.<br />
             Configure metodunda, SqlServer Bilgisi girilir. <br />
+            <span class="guncel" style="display:block"><b>Güncel not:</b> Bağlantı cümlesini (özellikle şifre içeriyorsa) koda yazmak güvenlik açığıdır;
+            kod paylaşıldığında şifre de paylaşılmış olur. Bu projede artık Configure metodu kullanılmıyor: bağlantı
+            appsettings.json / User Secrets / ortam değişkeninden okunup Startup.cs'te verilir (aşağıdaki "Startup dosyasında Context yolu" bölümüne bakın).</span>
             ModelCreating metodunda, modeller ve ara tablolar arasında ilişkiler belirtilir.<br />
             Sayfanın genelinde ise modeller belirtilir ve DbSet değişkeni ile veritabanındaki tablolar ile eşleştirilir.<br />
             Startup.cs dosyasında context/context yolu belli edilir.<hr />
@@ -490,8 +509,14 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
                 Dal katmanındaki, context sınıfına oluşturulan Configure metoduna gerek duyulmaz, kaldırılır.<br />
                 Constructor yazılır ve DbContextOptions türü options değer, base sınıfına  gönderilir.<br />
                 Startup dosyasında yolu bir değişkenle tutulur ve appsettings json ile yol belli edilir.<br />
-                Ama unutmyalım ki proje buna uygun değildir çünkü Da katmanında contextten constructor oluşturuluyor.
+                Projede artık bu yöntem kullanılmaktadır. Önerilen ve güvenli yol budur.
             </h5>
+            <div class="guncel">
+                <b>Güncel not:</b> Startup.cs'te: <i>services.AddDbContext&lt;AppDbContext&gt;(o =&gt; o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));</i><br />
+                Geliştirme ortamında şifreli bağlantı cümlesini appsettings.json yerine User Secrets'a yazın
+                (Web klasöründe: <i>dotnet user-secrets set "ConnectionStrings:DefaultConnection" "..."</i>),
+                sunucuda ise ortam değişkeni kullanın (<i>ConnectionStrings__DefaultConnection</i>).
+            </div>
             <pre class="prettyprint concrete">
 <b>AppDbContext</b>
         public AppDbContext(DbContextOptions&lt;AppDbContext> options) : base(options) // 
@@ -590,6 +615,12 @@ public  interface IBaseRepository&lt;T> where T:class, IData, new()
         <h4><b>Concrete (Somut) Katman</b></h4>
 
         <p>Core katmanın Concrete katmanında ise metotların gövdesini oluşturan BaseRepository sınıfı yer alır.</p>
+        <div class="guncel">
+            <b>Güncel not:</b> Soğan mimarisine geçişte BaseRepository Core'dan çıkarıldı, çünkü EF'ye bağlıydı ve Core'u da EF paketine bağımlı yapıyordu.
+            EF uygulaması artık <i>Dal/Concrete/EfCore/BaseEfRepository.cs</i> içindedir. Core yalnızca soyutlamaları (IData, IBaseRepository) içerir
+            ve IBaseRepository'den DbSet/IQueryable döndüren <i>Tablo()</i> ve <i>GetAllWithIQueryable()</i> metotları kaldırılmıştır.
+            Aşağıdaki kod, projenin ilk hâlini göstermektedir.
+        </div>
 
         <pre class="prettyprint concrete">
 public class BaseRepository&lt;T, TContext> : IBaseRepository&lt;T> where T : class, IData, new() where TContext : DbContext, new()
@@ -685,6 +716,11 @@ public class BaseRepository&lt;T, TContext> : IBaseRepository&lt;T> where T : cl
             Bunu önlemek ve daha esnek bir proje hayata geçirmek için UnitofWork kullanılır.<br />
             UnitofWork, Crud işlemlerini lokalde yapar ve savechanges() metodu 1 kere çağrılıp kayıt edilir.<br />
         </h5>
+        <div class="guncel">
+            <b>Güncel not:</b> Bu kural her yerde uygulanmıyor: <i>Delete</i>, <i>AddAsync</i>, <i>UpdateAsync</i> ve <i>CartRepository.Update</i>
+            hâlâ kendi içinde SaveChanges çağırıyor. Tutarlı olması için bu metotların da kaydetmeyi UnitOfWork'e bırakması gerekir.<br />
+            Ayrıca ilk hâlde <i>Delete</i> metodu kaydın durumunu "Deleted" yerine "Modified" yapıyordu, yani kayıt silinmiyordu; bu düzeltildi.
+        </div>
 
         <p> <a data-toggle="collapse" href="#baserepository01" role="button" aria-expanded="false" aria-controls="collapseExample">Base Repository'nin son hali için tıklayın</a></p>
         <pre class="collapse" id="baserepository01">
@@ -797,6 +833,13 @@ public class BaseRepository&lt;T, TContext> : IBaseRepository&lt;T> where T : cl
     <h3> <a data-toggle="collapse" href="#collapseExample5" role="button" aria-expanded="false" aria-controls="collapseExample">Dal Katmanı - Repository</a></h3>
     <div class="collapse" id="collapseExample5">
         <img src="/images/code-yeterkiiste-Dal01.jpg" alt="" />
+        <div class="guncel">
+            <b>Güncel not:</b> Soğan mimarisinde arayüzü kullanan katman, arayüzün sahibi olur. Bu yüzden repository arayüzleri
+            (IBrandRepository, ICategoryRepository vb.) Dal/Abstract'tan <i>Bll/Abstract/Repositories</i> klasörüne taşındı.
+            Dal artık yalnızca bu arayüzleri uygulayan somut EF sınıflarını içerir ve Bll'e referans verir; Bll ise Dal'ı tanımaz.<br />
+            Somut repository'ler <i>BaseRepository&lt;T, TContext&gt;</i> yerine <i>BaseEfRepository&lt;T&gt;</i>'den kalıtım alır.
+            Aşağıdaki anlatım projenin ilk hâlini göstermektedir.
+        </div>
         <p>
             Dal Katmanında Abstract ve Concrete klasörleri olur.<br />
             Abstract klasöründe, soyut sınıflar(metodların imzası), Concrete klasöründe ise somut sınıflar(metodların gövdesi) olacak.<br />
@@ -1031,7 +1074,18 @@ public class UnitOfWork : IUnitOfWork
             Startup dosyasına Unitofwork bildirilir.<br />
             services.AddDbContext&lt;AppDbContext>();
             services.AddScoped&lt;IUnitOfWork, UnitOfWork>();
-        </p><br /><br />
+        </p>
+        <div class="guncel">
+            <b>Güncel not:</b> Aşağıda anlatılan yöntemde UnitOfWork servisleri <i>new CategoryService(new CategoryRepository(context))</i> ile kendisi oluşturur.
+            Bu, Bll'i Dal'ın somut sınıflarına bağımlı yapar ve Dependency Inversion (SOLID'deki D) ilkesine aykırıdır.<br />
+            Projede artık UnitOfWork <i>Dal/Concrete/UnitOfWork.cs</i> içindedir ve servisleri constructor üzerinden alır;
+            tüm repository ve servis kayıtları Startup.cs'te yapılır:<br />
+            <i>services.AddScoped&lt;ICategoryRepository, CategoryRepository&gt;();</i><br />
+            <i>services.AddScoped&lt;ICategoryService, CategoryService&gt;();</i><br />
+            <i>services.AddScoped&lt;IUnitOfWork, UnitOfWork&gt;();</i> (diğer tüm repository ve servisler için de aynı şekilde)<br />
+            Ayrıca <i>AddDbContext&lt;AppDbContext&gt;()</i> artık bağlantı cümlesiyle birlikte çağrılır (yukarıdaki Dal bölümüne bakın).
+            Aşağıdaki anlatım, projenin ilk hâlini göstermektedir.
+        </div><br /><br />
 
 
         <p>
@@ -38650,6 +38704,14 @@ else
         Migrationınızı silin.<br />
         tekrar migrotion ulşturup database yapın.
     </p>
+    <div class="guncel">
+        <b>Güncel not:</b> Snapshot dosyasını elle düzenlemek ve uygulanmış migration'ları silmek önerilmez;
+        model ile veritabanı arasındaki kayıt bozulur ve canlı veritabanında veri kaybına yol açabilir. Doğru yol:<br />
+        1. Hatalı migration henüz veritabanına uygulanmadıysa: <i>Remove-Migration</i> ile kaldırın, modeli düzeltip yeniden <i>Add-Migration</i> yapın.<br />
+        2. Uygulandıysa: silmek yerine düzeltmeyi yapan <b>yeni</b> bir migration ekleyin (<i>Add-Migration KolonDuzeltme</i>, ardından <i>Update-Database</i>).<br />
+        3. "İzniniz yok" hatasında, bağlantıdaki SQL kullanıcısının tabloları değiştirme (ALTER/db_ddladmin) yetkisi olup olmadığını kontrol edin.<br />
+        Veritabanını silip baştan kurmak yalnızca içinde önemli veri olmayan geliştirme veritabanında kabul edilebilir.
+    </div>
            <br /><hr /><br />
 
     <h4>Then Include nedir</h4>
@@ -38704,6 +38766,11 @@ else
 <b>Startup da isim vereceğini bildir parametre oluştur</b>
        x.MapRoute(name: "detail", template: "{detailname}/{Id}", defaults: new { controller = "Ogeler", action = "detail" });
 </pre>
+        <div class="guncel">
+            <b>Güncel not:</b> Projede kullanılan route bu örnekten farklıdır: <i>x.MapRoute("4", "Product/{detailname}/{Id}", new { controller = "Ogeler", Action = "detail" });</i><br />
+            Başına sabit bir ön ek (Product/) koymak önemlidir: "{detailname}/{Id}" gibi tamamen değişkenli bir şablon,
+            iki parçalı her adresi (ör. /Member/Index) yakalayıp yanlış sayfaya yönlendirebilir.
+        </div>
         <pre class="prettyprint">
 <b>Html sayfasında tag helper doldurursun</b>
   &lt;a  asp-route-detailname="&#64;Url.FriendlyUrl(item.Name.ToString())"
@@ -38788,6 +38855,15 @@ public int? maxPrice { get; set; }
             Kısa hata alınabilir iki numara alabilir (5,0) 0 alıyor neden se  yüzden spit()[0] kullandık
 
         </p>
+        <div class="guncel">
+            <b>Güncel not:</b> <i>Split(",")[0]</i> burada da, ödeme kodunda da hatalı bir çözümdür.
+            Bir sayının metne çevrilirken virgül mü nokta mı kullanacağı sunucunun dil ayarına bağlıdır;
+            Split ise virgülden sonrasını, yani kuruşları atar (49,90 TL için 49 TL çekilir).<br />
+            Doğrusu, dil ayarından bağımsız biçimlendirmedir:
+            <i>tutar.ToString("0.00", CultureInfo.InvariantCulture)</i> &rarr; "49.90".<br />
+            Ayrıca iyzico'da sepet kalemi tutarı <b>birim fiyat x adet</b> olmalı ve tüm kalemlerin toplamı Price alanına eşit olmalıdır.
+            Proje bu şekilde düzeltildi (CartController.ToIyzicoPrice).
+        </div>
 
 
 
@@ -38805,7 +38881,9 @@ public int? maxPrice { get; set; }
             sonra extract ediyoruz local veritabanına gelip Extract Data seçeneğini tıklıyoruz.<br />
             ilk önce local veritabanı sonra dışardaki veritabanı bilgilerini giriyoruz. SUNUCU_ADRESI\MSSQLSERVER2012 <br />
             Copy data seçeneiğini tıklıyoruz ve istenilen tabloları seçip copy liyoruz.<br />
-            Veritabanı işi bittikten sonra Projenin Dal katmanına sql bilgilerini girip Projeyi son defa yeni sql bilgileriyle çalıştırırız.<br />
+            Veritabanı işi bittikten sonra yeni sql bilgilerini sunucuda ortam değişkeni olarak (ConnectionStrings__DefaultConnection) tanımlayıp projeyi son defa yeni sql bilgileriyle çalıştırırız.<br />
+            <span class="guncel" style="display:block"><b>Güncel not:</b> İlk hâlde bu bilgiler Dal katmanındaki koda yazılıyordu. Bu yüzden şifre kaynak kodla birlikte
+            paylaşılıyordu. Kod paylaşıldıysa veritabanı şifresi hosting panelinden değiştirilmelidir.</span>
             Hat varsa hataları düzeltiriz
             Projeyi derleyip alt alan adı oluşturduğumuz ftp ye atıyoruz
 
