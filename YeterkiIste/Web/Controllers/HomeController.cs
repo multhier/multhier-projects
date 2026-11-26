@@ -144,13 +144,5 @@ namespace Web.Controllers
 
 
 
-        public IActionResult OkuBeni()
-        {
-            return View();
-        }
-        public IActionResult OkuBeni1()
-        {
-            return View();
-        }
     }
 }
